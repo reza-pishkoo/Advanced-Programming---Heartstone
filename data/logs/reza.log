@@ -1039,3 +1039,60 @@ game 2020/07/08 12:08:23 end turn
 game 2020/07/08 12:08:23 draw Blessing of the Ancients
 game 2020/07/08 12:08:23 play Blessing of the Ancients
 exit game 2020/07/08 12:08:23 sign_out
+navigate 2020/07/09 12:01:31 passive page
+navigate 2020/07/09 12:01:31 start game
+game 2020/07/09 12:01:31 play Strength in Numbers
+game 2020/07/09 12:01:31 end turn
+game 2020/07/09 12:01:31 draw Mana Wyrm
+game 2020/07/09 12:01:31 play Mana Wyrm
+game 2020/07/09 12:01:31 end turn
+game 2020/07/09 12:01:31 draw Learn Draconic
+game 2020/07/09 12:01:31 play Learn Draconic
+game 2020/07/09 12:01:31 end turn
+game 2020/07/09 12:01:31 draw Aranasi Broodmother
+game 2020/07/09 12:01:31 play Dreadscale
+navigate 2020/07/09 12:04:58 passive page
+navigate 2020/07/09 12:04:58 start game
+game 2020/07/09 12:04:58 play Shieldbearer
+game 2020/07/09 12:04:58 end turn
+game 2020/07/09 12:04:58 draw Depth Charge
+game 2020/07/09 12:04:58 play Depth charge
+navigate 2020/07/09 12:08:41 passive page
+navigate 2020/07/09 12:08:41 start game
+game 2020/07/09 12:08:41 play Murloc Raider
+game 2020/07/09 12:08:41 end turn
+game 2020/07/09 12:08:41 draw Depth Charge
+game 2020/07/09 12:08:41 play Depth charge
+navigate 2020/07/09 12:12:44 passive page
+navigate 2020/07/09 12:12:44 start game
+game 2020/07/09 12:12:44 play Shieldbearer
+game 2020/07/09 12:12:44 end turn
+game 2020/07/09 12:12:44 draw Evasive Wyrm
+game 2020/07/09 12:12:44 play Murloc Raider
+game 2020/07/09 12:12:44 play Friendly Smith
+navigate 2020/07/09 12:22:15 passive page
+navigate 2020/07/09 12:22:15 start game
+game 2020/07/09 12:22:15 play Learn Draconic
+game 2020/07/09 12:22:15 end turn
+game 2020/07/09 12:22:15 draw Chaos Nova
+game 2020/07/09 12:22:15 end turn
+game 2020/07/09 12:22:15 draw Mana Wyrm
+game 2020/07/09 12:22:15 play Mana Wyrm
+game 2020/07/09 12:22:15 end turn
+game 2020/07/09 12:22:15 draw Dreadscale
+game 2020/07/09 12:22:15 play Dreadscale
+navigate 2020/07/09 12:48:05 passive page
+navigate 2020/07/09 12:48:05 start game
+game 2020/07/09 12:48:05 play Strength in Numbers
+game 2020/07/09 12:48:05 end turn
+game 2020/07/09 12:48:05 draw cards.Minion@39c35d2
+game 2020/07/09 12:48:05 play Depth charge
+navigate 2020/07/09 12:52:03 passive page
+navigate 2020/07/09 12:52:03 start game
+game 2020/07/09 12:52:03 end turn
+game 2020/07/09 12:52:03 draw cards.Minion@6e291055
+game 2020/07/09 12:52:03 play Depth Charge
+game 2020/07/09 12:52:03 end turn
+game 2020/07/09 12:52:03 draw cards.Minion@49461454
+game 2020/07/09 12:52:03 play Mana Wyrm
+exit game 2020/07/09 12:52:03 sign_out

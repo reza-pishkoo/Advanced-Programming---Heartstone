@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 
 //@Entity
 public abstract class Card {
+    @Override
+    public String toString() {
+        return name;
+    }
 
     private int manaCost;
     private String name;

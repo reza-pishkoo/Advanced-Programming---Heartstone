@@ -194,37 +194,42 @@ public class PlayPanel extends JPanel {
         Random random = new Random();
         int cardIndex = 0;
         cardIndex = random.nextInt(30);
+        //TODO
         getInstance().gameModel.getFirstPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getFirstPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getFirstPlayer().getCurrentDeck().remove(cardIndex);
 
         cardIndex = random.nextInt(29);
         getInstance().gameModel.getFirstPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getFirstPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getFirstPlayer().getCurrentDeck().remove(cardIndex);
+
 
         cardIndex = random.nextInt(28);
         getInstance().gameModel.getFirstPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getFirstPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getFirstPlayer().getCurrentDeck().remove(cardIndex);
+
     }
     private void initSecondPlayerStartingHandCards(){
         Random random = new Random();
         int cardIndex = 0;
         cardIndex = random.nextInt(30);
         getInstance().gameModel.getSecondPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getSecondPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getSecondPlayer().getCurrentDeck().remove(cardIndex);
+
 
         cardIndex = random.nextInt(29);
         getInstance().gameModel.getSecondPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getSecondPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getSecondPlayer().getCurrentDeck().remove(cardIndex);
 
         cardIndex = random.nextInt(28);
         getInstance().gameModel.getSecondPlayer().getHandCards().add
-                (CardFactory.build(getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().get(cardIndex)));
-        getInstance().gameModel.getSecondPlayer().getCurrentStringDeck().remove(cardIndex);
+                (getInstance().getGameModel().getSecondPlayer().getCurrentDeck().get(cardIndex));
+        getInstance().gameModel.getSecondPlayer().getCurrentDeck().remove(cardIndex);
+
     }
 
 
@@ -392,7 +397,7 @@ public class PlayPanel extends JPanel {
                     getInstance().getGameModel().getFirstPlayer().endTurn();
                     System.out.println(getInstance().getGameModel().getFirstPlayer().getCurrentMana());
                     getInstance().updatePanel();
-                    getInstance().FirstPlayerCardsRemained.setText(getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().size() + "");
+                    getInstance().FirstPlayerCardsRemained.setText(getInstance().gameModel.getFirstPlayer().getCurrentDeck().size() + "");
                     getInstance().FirstPlayerCardsRemained.repaint();
                     getInstance().FirstPlayerCardsRemained.revalidate();
                 }

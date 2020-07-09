@@ -6,10 +6,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 public class Deck {
@@ -43,7 +40,7 @@ public class Deck {
         this.deckName = deckName;
         this.use = 0;
         this.win = 0;
-        cardsDetails = new HashMap<>();
+        cardsDetails = new TreeMap<>();
     }
 
     public void initCardMap(){
@@ -52,6 +49,10 @@ public class Deck {
         }
     }
     public void cardPlayed(String cardName){
+        System.out.println(getCardsDetails());
+        System.out.println(cardName);
+        System.out.println(getCardsDetails().get(cardName));
+        System.out.println(getCardsDetails().get(cardName).getUse());
         getCardsDetails().get(cardName).setUse(getCardsDetails().get(cardName).getUse() + 1);
     }
 

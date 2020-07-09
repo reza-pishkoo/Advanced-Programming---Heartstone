@@ -100,7 +100,7 @@ public class CardFactory {
 
             case "Depth Charge" :
                 Card card8 = new Minion();
-                card8.setName("Depth charge");
+                card8.setName("Depth Charge");
                 card8.setManaCost(1);
                 card8.setRarity(Rarity.RARE);
                 card8.setCardClass(CardClass.NEUTRAL);

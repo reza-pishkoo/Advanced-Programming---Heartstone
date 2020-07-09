@@ -3,6 +3,7 @@ package model;
 import CLI.Main;
 import cards.Card;
 import cards.CardFactory;
+import cards.Minion;
 import cards.Weapon;
 import data.Log;
 import gui.MainFrame;
@@ -48,6 +49,14 @@ public class PlayerModel {
         }
     }
 
+    public List<Card> getCurrentDeck() {
+        return currentDeck;
+    }
+
+    public void setCurrentDeck(List<Card> currentDeck) {
+        this.currentDeck = currentDeck;
+    }
+
     public String getPassive() {
         return passive;
     }
@@ -76,13 +85,6 @@ public class PlayerModel {
         this.gameModel = gameModel;
     }
 
-    public List<String> getCurrentStringDeck() {
-        return currentStringDeck;
-    }
-
-    public void setCurrentStringDeck(List<String> currentStringDeck) {
-        this.currentStringDeck = currentStringDeck;
-    }
 
     public List<Card> getHandCards() {
         return handCards;
@@ -133,20 +135,20 @@ public class PlayerModel {
         else
             setCurrentMana(10);
         Random random = new Random();
-        if(getCurrentStringDeck().size() > 0) {
-            int cardIndex = random.nextInt(getCurrentStringDeck().size());
+        if(getCurrentDeck().size() > 0) {
+            int cardIndex = random.nextInt(getCurrentDeck().size());
             if (getHandCards().size() < 12) {
-                getHandCards().add(CardFactory.build(getCurrentStringDeck().get(cardIndex)));
+                getHandCards().add(getCurrentDeck().get(cardIndex));
             }
-            Log.bodyLogger("game", "draw " + getCurrentStringDeck().get(cardIndex).toString());
-            PlayPanel.getInstance().gameLogPanel.appendText("draw " + getCurrentStringDeck().get(cardIndex).toString());
-            getCurrentStringDeck().remove(cardIndex);
+            Log.bodyLogger("game", "draw " + getCurrentDeck().get(cardIndex).toString());
+            PlayPanel.getInstance().gameLogPanel.appendText("draw " + getCurrentDeck().get(cardIndex).toString());
+            getCurrentDeck().remove(cardIndex);
         }
     }
 
     public void addCardToBattleground(Card card){
         if(getCurrentMana() >= card.getManaCost()) {
-                if (card.getType().type().equalsIgnoreCase("MINION")) {
+                if (card instanceof Minion) {
                     if (getBattleGroundCards().size() < 7) {
                         getBattleGroundCards().add(card);
                         getHandCards().remove(card);
@@ -154,7 +156,7 @@ public class PlayerModel {
                         Log.bodyLogger("game", "play "+ card.getName());
                         cardPlayed(card.getName());
                     }
-                } else if (card.getType().type().equalsIgnoreCase("WEAPON")) {
+                } else if (card instanceof Weapon) {
                     setWeapon((Weapon) card);
                     getHandCards().remove(card);
                     PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
