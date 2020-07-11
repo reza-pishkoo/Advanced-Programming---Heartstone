@@ -1,9 +1,12 @@
 package cards;
 
+import logicController.actions.WeaponObserver;
+
 public class Weapon extends Card {
 
     private int Durability;
     private int attack;
+    private WeaponObserver weaponObserver;
 
     public Weapon(){
     }
@@ -22,5 +25,13 @@ public class Weapon extends Card {
 
     public void setAttack(int attack) {
         this.attack = attack;
+    }
+
+    public WeaponObserver getWeaponObserver() {
+        return weaponObserver;
+    }
+
+    public void setWeaponObserver(WeaponObserver weaponObserver) {
+        this.weaponObserver = weaponObserver;
     }
 }

@@ -1,9 +1,12 @@
 package cards;
 
+import logicController.actions.MinionObserver;
+
 import java.util.ArrayList;
 
 public class Minion extends Card {
 
+    private MinionObserver minionObserver;
     private int attack;
     private int HP;
 
@@ -32,4 +35,11 @@ public class Minion extends Card {
         return HP;
     }
 
+    public MinionObserver getMinionObserver() {
+        return minionObserver;
+    }
+
+    public void setMinionObserver(MinionObserver minionObserver) {
+        this.minionObserver = minionObserver;
+    }
 }

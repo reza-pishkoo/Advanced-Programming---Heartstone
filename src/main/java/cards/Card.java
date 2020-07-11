@@ -1,6 +1,8 @@
 package cards;
 
 
+import logicController.actions.ManaWyrm;
+
 import javax.persistence.Entity;
 
 //@Entity
@@ -17,11 +19,20 @@ public abstract class Card {
     private CardClass cardClass;
     private Type type;
     private Rarity rarity;
+    private boolean canUse;
 
 
     public Card(){
+        canUse = false;
     }
 
+    public boolean isCanUse() {
+        return canUse;
+    }
+
+    public void setCanUse(boolean canUse) {
+        this.canUse = canUse;
+    }
 
     public void setManaCost(int manaCost) {
         this.manaCost = manaCost;
@@ -78,4 +89,5 @@ public abstract class Card {
     public Type getType() {
         return type;
     }
+
 }

@@ -106,94 +106,21 @@ public class PlayerModel {
         return battleGroundCards;
     }
 
-    public void setBattleGroundCards(List<Card> battleGroundCards) {
-        this.battleGroundCards = battleGroundCards;
-    }
-
     public int getCurrentMana() {
         return currentMana;
     }
 
-    private void setCurrentMana(int currentMana) {
+    public void setCurrentMana(int currentMana) {
         this.currentMana = currentMana;
     }
 
 
-
-    public void endTurn(){
-        System.out.println("check commit");
-        getGameModel().setRound(getGameModel().getRound()+1);
-        if(finishedOrNot()){
-            finishGame();
-            return;
-        }
-        Log.bodyLogger("game", "end turn");
-        PlayPanel.getInstance().gameLogPanel.appendText("clicked end turn");
-
-        if(getGameModel().getRound() <= 10)
-            setCurrentMana(getGameModel().getRound());
-        else
-            setCurrentMana(10);
-        Random random = new Random();
-        if(getCurrentDeck().size() > 0) {
-            int cardIndex = random.nextInt(getCurrentDeck().size());
-            if (getHandCards().size() < 12) {
-                getHandCards().add(getCurrentDeck().get(cardIndex));
-            }
-            Log.bodyLogger("game", "draw " + getCurrentDeck().get(cardIndex).toString());
-            PlayPanel.getInstance().gameLogPanel.appendText("draw " + getCurrentDeck().get(cardIndex).toString());
-            getCurrentDeck().remove(cardIndex);
-        }
-    }
-
-    public void addCardToBattleground(Card card){
-        if(getCurrentMana() >= card.getManaCost()) {
-                if (card instanceof Minion) {
-                    if (getBattleGroundCards().size() < 7) {
-                        getBattleGroundCards().add(card);
-                        getHandCards().remove(card);
-                        PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
-                        Log.bodyLogger("game", "play "+ card.getName());
-                        cardPlayed(card.getName());
-                    }
-                } else if (card instanceof Weapon) {
-                    setWeapon((Weapon) card);
-                    getHandCards().remove(card);
-                    PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
-                    Log.bodyLogger("game", "play "+ card.getName());
-                    cardPlayed(card.getName());
-                } else {
-                    getHandCards().remove(card);
-                    PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
-                    Log.bodyLogger("game", "play "+ card.getName());
-                    cardPlayed(card.getName());
-                }
-                setCurrentMana(getCurrentMana() - card.getManaCost());
-
-        }else{
-            JOptionPane.showMessageDialog(null, "not enought mana", "mana", JOptionPane.ERROR_MESSAGE);
-        }
-    }
     public void setPassive(String passive){
         this.passive = passive;
     }
 
-    private void cardPlayed(String cardName){
+    public void cardPlayed(String cardName){
         Main.currentUser.getAllDecks().get(Main.currentUser.getCurDeck()).cardPlayed(cardName);
     }
 
-    private void finishGame(){
-
-        Main.currentUser.getAllDecks().get(Main.currentUser.getCurDeck()).setUse(Main.currentUser.getAllDecks().get(Main.currentUser.getCurDeck()).getUse()+1);
-        Main.currentUser.getAllDecks().get(Main.currentUser.getCurDeck()).setWin(Main.currentUser.getAllDecks().get(Main.currentUser.getCurDeck()).getWin()+1);
-        PlayPanel.getInstance().gameLogPanel.appendText("game finished");
-        Log.bodyLogger("game", "game finished");
-        JOptionPane.showMessageDialog(null,"game over", "Game", JOptionPane.OK_OPTION);
-        MainFrame.cl.show(MainFrame.panelCont, "3");
-    }
-    private boolean finishedOrNot(){
-        if(gameModel.getRound() == 61)
-            return true;
-        return false;
-    }
 }

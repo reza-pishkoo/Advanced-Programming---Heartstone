@@ -1,9 +1,11 @@
 package gui.playPanel;
 
 import cards.Card;
-import cards.CardFactory;
+import cards.Minion;
 import cards.Weapon;
 import config.Constants;
+import guiController.GuiController;
+import logicController.*;
 import data.Data;
 import data.Log;
 import gui.MainFrame;
@@ -14,10 +16,7 @@ import model.UpdateGame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -25,11 +24,14 @@ import java.util.Random;
 public class PlayPanel extends JPanel {
 
 
+    private GuiController guiController;
+
     private JButton backButton;
     private JButton exitButton;
     private List<UpdateGame> updatable;
     private GameModel gameModel;
     private JButton endTurn;
+
 
     public GameLog gameLogPanel;
 
@@ -72,7 +74,14 @@ public class PlayPanel extends JPanel {
     }
 
     public static void startGame(){
-        getInstance().initGameModel();
+        LogicController logicController;
+        logicController = new LogicController();
+        getInstance().guiController = new GuiController(logicController.getResponses(), logicController.getRequests());
+        getInstance().guiController.setPlayPanel(getInstance());
+        logicController.start();
+        getInstance().guiController.start();
+        getInstance().updateByModel(logicController.getGameModel());
+
         getInstance().initBackButton();
         getInstance().initExitButton();
 
@@ -102,12 +111,8 @@ public class PlayPanel extends JPanel {
 
     private void updateAll(){
         getInstance().updatePanel();
-        getInstance().repaint();
         getInstance().revalidate();
-    }
-
-    private void initGameModel(){
-        getInstance().gameModel = new GameModel();
+        getInstance().repaint();
     }
 
     private void initFirstPlayerHandPanel(){
@@ -183,7 +188,6 @@ public class PlayPanel extends JPanel {
         getInstance().add(getInstance().FirstPlayerCardsRemained);
     }
     private void finishGame(){
-        gameModel = new GameModel();
         getInstance().remove(getInstance().FirstPlayerCardsRemained);
         getInstance().gameModel = gameModel;
         getInstance().remove(getInstance().FirstPlayerManaPanel);
@@ -302,8 +306,8 @@ public class PlayPanel extends JPanel {
         public void update() {
             removeAll();
             drawBattleGroundCards();
-            repaint();
             revalidate();
+            repaint();
             setBackground(new Color(0,0,0,5));
         }
         private void drawBattleGroundCards(){
@@ -312,7 +316,20 @@ public class PlayPanel extends JPanel {
             for(Card card : cards){
                 MouseListener mouseListener = new MouseListener() {
                     @Override
-                    public void mouseClicked(MouseEvent mouseEvent) { }
+                    public void mouseClicked(MouseEvent mouseEvent) {
+                        System.out.println(getInstance().guiController.isNeedTarget());
+                        if(getInstance().guiController.isNeedTarget()) {
+                            System.out.println("toosh");
+                            JOptionPane.showMessageDialog(null, "choose target", "target", JOptionPane.ERROR_MESSAGE);
+                            getInstance().guiController.sendRequest(new MinionTargetRequest(playerModel, (Object)card));
+                        }else{
+                            System.out.println("a");
+                            if (card instanceof Minion) {
+                                System.out.println("b");
+                                getInstance().guiController.sendRequest(new MinionAttackRequest(playerModel, (Minion) card));
+                            }
+                        }
+                    }
                     @Override
                     public void mousePressed(MouseEvent mouseEvent) { }
                     @Override
@@ -323,7 +340,6 @@ public class PlayPanel extends JPanel {
                     public void mouseExited(MouseEvent mouseEvent) { }
                 };
                 InGameImageCardPanel cardImage = new InGameImageCardPanel(card.getName(), mouseListener, true, card);
-//                ImageCardPanel cardImage = new ImageCardPanel(cardName, mouseListener, true);
                 cardImage.setBounds((i*50), 30, 50, 70);
                 add(cardImage);
                 i++;
@@ -347,37 +363,29 @@ public class PlayPanel extends JPanel {
         public void update() {
             removeAll();
             drawHandCards();
-            repaint();
             revalidate();
+            repaint();
             setBackground(new Color(0,0,0,5));
         }
         private void drawHandCards(){
             int i = 0;
-            for(Card card : cards){
+            for(int j = 0; j < cards.size(); j++){
                 i++;
-                MouseListener mouseListener = new MouseListener() {
+                int finalJ = j;
+                MouseListener mouseListener = new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent mouseEvent) {
-                        if(getInstance().getGameModel().getRound()%2 == playerModel.getTurn()%2) {
-                            String log = "Player" + playerModel.getTurn() + "played  " + card.getName() + "\n";
-                            System.out.println(playerModel.getCurrentMana());
-                            playerModel.addCardToBattleground(card);
-                            getInstance().updatePanel();
-                            getInstance().repaint();
-                            getInstance().revalidate();
-                        }
+
+                        getInstance().guiController.sendRequest(new AddToBattleGroundRequest(playerModel, cards.get(finalJ)));
+
+
+                        getInstance().updatePanel();
+                        getInstance().revalidate();
+                        getInstance().repaint();
+                        updateUI();
                     }
-                    @Override
-                    public void mousePressed(MouseEvent mouseEvent) { }
-                    @Override
-                    public void mouseReleased(MouseEvent mouseEvent) { }
-                    @Override
-                    public void mouseEntered(MouseEvent mouseEvent) { }
-                    @Override
-                    public void mouseExited(MouseEvent mouseEvent) { }
                 };
-                InGameImageCardPanel cardImage = new InGameImageCardPanel(card.getName(), mouseListener, true, card);
-//                ImageCardPanel cardImage = new ImageCardPanel(cardName, mouseListener, true);
+                InGameImageCardPanel cardImage = new InGameImageCardPanel(cards.get(finalJ).getName(), mouseListener, true, cards.get(finalJ));
                 cardImage.setBounds(600 - (i*50), 10, 50, 70);
                 add(cardImage);
             }
@@ -393,26 +401,17 @@ public class PlayPanel extends JPanel {
         endTurn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if(getInstance().getGameModel().getRound()%2 == 0) {
-                    getInstance().getGameModel().getFirstPlayer().endTurn();
-                    System.out.println(getInstance().getGameModel().getFirstPlayer().getCurrentMana());
-                    getInstance().updatePanel();
-                    getInstance().FirstPlayerCardsRemained.setText(getInstance().gameModel.getFirstPlayer().getCurrentDeck().size() + "");
-                    getInstance().FirstPlayerCardsRemained.repaint();
-                    getInstance().FirstPlayerCardsRemained.revalidate();
-                }
-                else{
-                    System.out.println("hi hi ");
-                    getInstance().getGameModel().getSecondPlayer().endTurn();
-                    System.out.println(getInstance().getGameModel().getSecondPlayer().getCurrentMana());
-                    getInstance().updatePanel();
-//                    getInstance().FirstPlayerCardsRemained.setText(getInstance().gameModel.getFirstPlayer().getCurrentStringDeck().size() + "");
-//                    getInstance().FirstPlayerCardsRemained.repaint();
-//                    getInstance().FirstPlayerCardsRemained.revalidate();
-                }
+
+                guiController.sendRequest(new endTurn(null));
+
                 getInstance().updatePanel();
-                getInstance().repaint();
+                getInstance().FirstPlayerCardsRemained.setText(getInstance().gameModel.getFirstPlayer().getCurrentDeck().size() + "");
+                getInstance().FirstPlayerCardsRemained.revalidate();
+                getInstance().FirstPlayerCardsRemained.repaint();
+
+                getInstance().updatePanel();
                 getInstance().revalidate();
+                getInstance().repaint();
             }
         });
         add(endTurn);
@@ -501,17 +500,25 @@ public class PlayPanel extends JPanel {
         @Override
         public void update() {
             drawMana();
-            repaint();
             revalidate();
+            repaint();
             setBackground(new Color(0,0,0,5));
         }
     }
 
 
 
+    public void updateByModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+        updatePanel();
+    }
+
     private void updatePanel(){
         for(UpdateGame item : updatable){
-            item.update();
+            item.update();//remeber to delete
+            revalidate();
+            repaint();
+//            updateUI();
         }
     }
 

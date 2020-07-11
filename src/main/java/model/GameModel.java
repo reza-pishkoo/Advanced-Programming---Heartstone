@@ -17,6 +17,17 @@ public class GameModel {
         secondPlayer = new PlayerModel(Main.enemyUser, this, 2);
     }
 
+    public PlayerModel getNextPlayer(){
+        if(getRound() % 2 == 0)
+            return getFirstPlayer();
+        return getSecondPlayer();
+    }
+    public PlayerModel getCurrentPlayer(){
+        if(getRound() % 2 == 1)
+            return getFirstPlayer();
+        return getSecondPlayer();
+    }
+
     public PlayerModel getFirstPlayer() {
         return firstPlayer;
     }
@@ -40,6 +51,8 @@ public class GameModel {
     public void setRound(int round) {
         this.round = round;
     }
+
+
 
 
 
