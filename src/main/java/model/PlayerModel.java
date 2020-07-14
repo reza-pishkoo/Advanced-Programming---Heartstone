@@ -3,17 +3,14 @@ package model;
 import CLI.Main;
 import cards.Card;
 import cards.CardFactory;
-import cards.Minion;
 import cards.Weapon;
-import data.Log;
-import gui.MainFrame;
-import gui.playPanel.PlayPanel;
+import heroes.Hero;
 import user.User;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
+import static data.Data.fetch;
 
 public class PlayerModel {
     private List<String> currentStringDeck;
@@ -23,13 +20,13 @@ public class PlayerModel {
     private GameModel gameModel;
     private Weapon weapon;
     private String passive;
-    private String hero;
+    private Hero hero;
     private List<Card> currentDeck;
     private int turn;
 
 
     public PlayerModel(User user, GameModel gameModel, int turn) {
-        this.hero = user.getAllHeroes().get(user.getCurHero()).getName();
+        this.hero = fetch(Hero.class, user.getAllHeroes().get(user.getCurHero()).getName());
         this.currentStringDeck = new ArrayList<>();
         for(String card : user.getAllDecks().get(user.getCurDeck()).getCards())
             this.currentStringDeck.add(card);
@@ -44,7 +41,7 @@ public class PlayerModel {
     private void setCards(){
         currentDeck = new ArrayList<>();
         for (String name: currentStringDeck) {
-            Card x = CardFactory.build(name);
+            Card x = CardFactory.build(name, this);
             currentDeck.add(x);
         }
     }
@@ -61,11 +58,11 @@ public class PlayerModel {
         return passive;
     }
 
-    public String getHero() {
+    public Hero getHero() {
         return hero;
     }
 
-    public void setHero(String hero) {
+    public void setHero(Hero hero) {
         this.hero = hero;
     }
 

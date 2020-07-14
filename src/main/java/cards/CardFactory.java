@@ -1,9 +1,10 @@
 package cards;
 
 import logicController.actions.*;
+import model.PlayerModel;
 
 public class CardFactory {
-    public static Card build(String CardName){
+    public static Card build(String CardName, PlayerModel player){
         switch (CardName){
 
             case "Mana Wyrm" :
@@ -17,7 +18,7 @@ public class CardFactory {
                 ((Minion)card1).setAttack(1);
                 ((Minion)card1).setHP(3);
                 card1.setDescription("Whenever you cast a spell, gain +1 Attack.");
-                ((Minion) card1).setMinionObserver(new ManaWyrm());
+                ((Minion) card1).setMinionObserver(new ManaWyrm(player, (Minion) card1));
                 return card1;
 
             case "Polymorph" :
@@ -28,7 +29,7 @@ public class CardFactory {
                 card2.setCardClass(CardClass.MAGE);
                 card2.setType(Type.SPELL);
                 card2.setValue(20);
-                ((Spell) card2).setSpellObserver(new Polymorph());
+                ((Spell) card2).setSpellObserver(new Polymorph(player));
                 card2.setDescription("Transform a minion\n" + "into a 1/1 Sheep.");
                 return card2;
 
@@ -40,7 +41,7 @@ public class CardFactory {
                 card3.setCardClass(CardClass.ROUGE);
                 card3.setType(Type.SPELL);
                 card3.setValue(20);
-                ((Spell) card3).setSpellObserver(new FriendlySmith());
+                ((Spell) card3).setSpellObserver(new FriendlySmith(player));
                 card3.setDescription("Discover a weapon \n" +
                         "from any class. Add it \n" +
                         "to your Adventure Deck\n" +
@@ -55,7 +56,7 @@ public class CardFactory {
                 card4.setCardClass(CardClass.WARLOCK);
                 card4.setType(Type.MINION);
                 card4.setValue(20);
-                ((Minion)card4).setMinionObserver(new Dreadscale());
+                ((Minion)card4).setMinionObserver(new Dreadscale(player, (Minion) card4));
                 card4.setDescription("At the end of your turn, deal 1 damage to all other minions.");
                 ((Minion)card4).setAttack(4);
                 ((Minion)card4).setHP(2);
@@ -71,7 +72,7 @@ public class CardFactory {
                 card5.setValue(20);
                 ((Minion)card5).setAttack(4);
                 ((Minion)card5).setHP(4);
-                ((Minion)card5).setMinionObserver(new BladeOfCThun());
+                ((Minion)card5).setMinionObserver(new BladeOfCThun(player, (Minion) card5));
                 card5.setDescription("Destroy a minion.Add its Attack and Health to your C'Thun's(wherever it is).");
                 return card5;
 
@@ -85,7 +86,7 @@ public class CardFactory {
                 card6.setValue(20);
                 ((Minion)card6).setAttack(4);
                 ((Minion)card6).setHP(6);
-                ((Minion)card6).setMinionObserver(new AranasiBroodmother());
+                ((Minion)card6).setMinionObserver(new AranasiBroodmother(player, (Minion) card6));
                 card6.setDescription("Taunt\n" +
                         "When you draw this, restore\n" +
                         "4 Health to your hero.");
@@ -102,7 +103,7 @@ public class CardFactory {
                 card7.setValue(20);
                 ((Minion)card7).setAttack(3);
                 ((Minion)card7).setHP(5);
-                ((Minion)card7).setMinionObserver(new CobaltSpellkin());
+                ((Minion)card7).setMinionObserver(new CobaltSpellkin(player, (Minion) card7));
                 card7.setDescription("[b]Battlecry:[/b] Add two 1-Cost spells from your class to your hand.");
                 return card7;
 
@@ -116,7 +117,7 @@ public class CardFactory {
                 card8.setValue(20);
                 ((Minion)card8).setAttack(0);
                 ((Minion)card8).setHP(5);
-                ((Minion)card8).setMinionObserver(new DepthCharge());
+                ((Minion)card8).setMinionObserver(new DepthCharge(player, (Minion) card8));
                 card8.setDescription("At the start of your turn, deal 5 damage to ALL minions.");
                 return card8;
 
@@ -130,7 +131,7 @@ public class CardFactory {
                 card9.setValue(20);
                 ((Minion)card9).setAttack(5);
                 ((Minion)card9).setHP(3);
-                ((Minion)card9).setMinionObserver(new EvasiveWyrm());
+                ((Minion)card9).setMinionObserver(new EvasiveWyrm(player, (Minion) card9));
                 card9.setDescription("Divine Shield. Rush.\n" +
                         "Can't be targeted by spells or Hero Powers.");
                 return card9;
@@ -143,7 +144,7 @@ public class CardFactory {
                 card10.setCardClass(CardClass.NEUTRAL);
                 card10.setType(Type.SPELL);
                 card10.setValue(20);
-                ((Spell)card10).setSpellObserver(new BlessingOfTheAncients());
+                ((Spell)card10).setSpellObserver(new BlessingOfTheAncients(player));
                 card10.setDescription("Twinspell\n" +
                         "Give your minions +1/+1.");
                 return card10;
@@ -156,22 +157,9 @@ public class CardFactory {
                 card11.setCardClass(CardClass.NEUTRAL);
                 card11.setType(Type.SPELL);
                 card11.setValue(20);
-                ((Spell)card11).setSpellObserver(new ChaosNova());
+                ((Spell)card11).setSpellObserver(new ChaosNova(player));
                 card11.setDescription("Deal 4 damage to all minions");
                 return card11;
-
-
-            case "Starfire" :
-                Card card12 = new Spell();
-                card12.setName("Starfire");
-                card12.setManaCost(6);
-                card12.setRarity(Rarity.COMMON);
-                card12.setCardClass(CardClass.NEUTRAL);
-                card12.setType(Type.SPELL);
-                card12.setValue(20);
-                ((Spell)card12).setSpellObserver(new Starfire());
-                card12.setDescription("Deal 4 damage \n Draw a card");
-                return card12;
 
 
             case "Piloted Shredder" :
@@ -184,7 +172,7 @@ public class CardFactory {
                 card13.setValue(20);
                 ((Minion)card13).setAttack(4);
                 ((Minion)card13).setHP(3);
-                ((Minion)card13).setMinionObserver(new PilotedShredder());
+                ((Minion)card13).setMinionObserver(new PilotedShredder(player, (Minion) card13));
                 card13.setDescription("Deathrattle: Summon a random 2-Cost minion.");
                 return card13;
 
@@ -197,7 +185,7 @@ public class CardFactory {
                 card14.setCardClass(CardClass.NEUTRAL);
                 card14.setType(Type.SPELL);
                 card14.setValue(20);
-                ((Spell)card14).setSpellObserver(new HuntersMark());
+                ((Spell)card14).setSpellObserver(new HuntersMark(player));
                 card14.setDescription("Change a minion's Health to 1");
                 return card14;
 
@@ -212,7 +200,7 @@ public class CardFactory {
                 card15.setValue(20);
                 ((Minion)card15).setAttack(4);
                 ((Minion)card15).setHP(3);
-                ((Minion)card15).setMinionObserver(new GnomishInventor());
+                ((Minion)card15).setMinionObserver(new GnomishInventor(player, (Minion) card15));
                 card15.setDescription("Battlecry: Draw a card.");
                 return card15;
 
@@ -227,8 +215,9 @@ public class CardFactory {
                 card16.setValue(20);
                 ((Minion)card16).setAttack(1);
                 ((Minion)card16).setHP(2);
-                ((Minion)card16).setMinionObserver(new GoldshireFootman());
+                ((Minion)card16).setMinionObserver(new GoldshireFootman(player, (Minion) card16));
                 card16.setDescription("Taunt");
+                ((Minion)card16).setTaunt(true);
                 return card16;
 
 
@@ -242,7 +231,7 @@ public class CardFactory {
                 card17.setValue(20);
                 ((Minion)card17).setAttack(2);
                 ((Minion)card17).setHP(1);
-                ((Minion)card17).setMinionObserver(new MurlocRaider());
+                ((Minion)card17).setMinionObserver(new MurlocRaider(player, (Minion) card17));
                 card17.setDescription("");
                 return card17;
 
@@ -257,8 +246,9 @@ public class CardFactory {
                 card18.setValue(20);
                 ((Minion)card18).setAttack(1);
                 ((Minion)card18).setHP(1);
-                ((Minion)card18).setMinionObserver(new StonetuskBoar());
+                ((Minion)card18).setMinionObserver(new StonetuskBoar(player, (Minion) card18));
                 card18.setDescription("Charge");
+                ((Minion)card18).setRush(true);
                 return card18;
 
 
@@ -272,7 +262,7 @@ public class CardFactory {
                 card19.setValue(20);
                 ((Minion)card19).setAttack(0);
                 ((Minion)card19).setHP(7);
-                ((Minion)card19).setMinionObserver(new Doomsayer());
+                ((Minion)card19).setMinionObserver(new Doomsayer(player, (Minion) card19));
                 card19.setDescription("At the start of your turn, destroy ALL minions");
                 return card19;
 
@@ -287,8 +277,9 @@ public class CardFactory {
                 card20.setValue(20);
                 ((Minion)card20).setAttack(0);
                 ((Minion)card20).setHP(4);
-                ((Minion)card20).setMinionObserver(new Shieldbearer());
+                ((Minion)card20).setMinionObserver(new Shieldbearer(player, (Minion) card20));
                 card20.setDescription("Taunt");
+                ((Minion)card20).setTaunt(true);
                 return card20;
 
             case"Sprint":
@@ -299,7 +290,7 @@ public class CardFactory {
                 card21.setCardClass(CardClass.NEUTRAL);
                 card21.setType(Type.SPELL);
                 card21.setValue(20);
-                ((Spell)card21).setSpellObserver(new Sprint());
+                ((Spell)card21).setSpellObserver(new Sprint(player));
                 card21.setDescription("Draw 4 cards.");
                 return card21;
 
@@ -312,7 +303,7 @@ public class CardFactory {
                 card22.setCardClass(CardClass.NEUTRAL);
                 card22.setType(Type.SPELL);
                 card22.setValue(20);
-                ((Spell)card22).setSpellObserver(new SwarmOfLocusts());
+                ((Spell)card22).setSpellObserver(new SwarmOfLocusts(player));
                 card22.setDescription("Summon seven 1/1 Locusts with Rush.");
                 return card22;
 
@@ -324,7 +315,7 @@ public class CardFactory {
                 card23.setCardClass(CardClass.NEUTRAL);
                 card23.setType(Type.SPELL);
                 card23.setValue(20);
-                ((Spell)card23).setSpellObserver(new PharaohsBlessing());
+                ((Spell)card23).setSpellObserver(new PharaohsBlessing(player));
                 card23.setDescription("Give a minion +4/+4, Divine Shield, and Taunt.");
                 return card23;
 
@@ -336,7 +327,7 @@ public class CardFactory {
                 card24.setCardClass(CardClass.NEUTRAL);
                 card24.setType(Type.SPELL);
                 card24.setValue(20);
-                ((Spell)card24).setSpellObserver(new BookOfSpecters());
+                ((Spell)card24).setSpellObserver(new BookOfSpecters(player));
                 card24.setDescription("Draw 3 cards. Discard any spells drawn.");
                 return card24;
 
@@ -350,7 +341,7 @@ public class CardFactory {
                 card25.setValue(20);
                 ((Minion)card25).setAttack(5);
                 ((Minion)card25).setHP(5);
-                ((Minion)card25).setMinionObserver(new Sathrovarr());
+                ((Minion)card25).setMinionObserver(new Sathrovarr(player, (Minion) card25));
                 card25.setDescription("Battlecry: Choose a friendly minion. Add a copy of it to your hand, deck, and battlefield.");
                 return card25;
 
@@ -365,9 +356,10 @@ public class CardFactory {
                 card26.setValue(20);
                 ((Minion)card26).setAttack(3);
                 ((Minion)card26).setHP(6);
-                ((Minion)card26).setMinionObserver(new TombWarden());
+                ((Minion)card26).setMinionObserver(new TombWarden(player, (Minion) card26));
                 card26.setDescription("Taunt\n" +
                         "Battlecry: Summon a copy of this minion.");
+                ((Minion)card26).setTaunt(true);
                 return card26;
 
             case "Security Rover" :
@@ -380,7 +372,7 @@ public class CardFactory {
                 card27.setValue(20);
                 ((Minion)card27).setAttack(2);
                 ((Minion)card27).setHP(6);
-                ((Minion)card27).setMinionObserver(new SecurityRover());
+                ((Minion)card27).setMinionObserver(new SecurityRover(player, (Minion) card27));
                 card27.setDescription("Whenever this minion\n" +
                         "takes damage, summon a\n" +
                         "2/3 Mech with Taunt.");
@@ -397,7 +389,7 @@ public class CardFactory {
                 card28.setValue(20);
                 ((Minion)card28).setAttack(4);
                 ((Minion)card28).setHP(4);
-                ((Minion)card28).setMinionObserver(new CurioCollector());
+                ((Minion)card28).setMinionObserver(new CurioCollector(player, (Minion) card28));
                 card28.setDescription("Whenever you draw a card, gain +1/+1.");
                 return card28;
 
@@ -409,7 +401,7 @@ public class CardFactory {
                 card29.setCardClass(CardClass.NEUTRAL);
                 card29.setType(Type.SPELL);
                 card29.setValue(20);
-                ((Spell)card29).setSpellObserver(new StrengthInNumbers());
+                ((Spell)card29).setSpellObserver(new StrengthInNumbers(player));
                 card29.setDescription("Sidequest: Spend 10 Mana on minions.\n" +
                         "Reward: Summon a minion from your deck.");
                 return card29;
@@ -423,7 +415,7 @@ public class CardFactory {
                 card30.setCardClass(CardClass.NEUTRAL);
                 card30.setType(Type.SPELL);
                 card30.setValue(20);
-                ((Spell)card30).setSpellObserver(new LearnDraconic());
+                ((Spell)card30).setSpellObserver(new LearnDraconic(player));
                 card30.setDescription("Sidequest: Spend\n" +
                         "8 Mana on spells.\n" +
                         "Reward: Summon a\n" +
@@ -431,32 +423,17 @@ public class CardFactory {
                 return card30;
 
 
-            case"Gnomish Army Knife":
-                Card card31 = new Spell();
-                card31.setName("Gnomish Army Knife");
-                card31.setManaCost(5);
-                card31.setRarity(Rarity.FREE);
-                card31.setCardClass(CardClass.PALADIN);
-                card31.setType(Type.SPELL);
-                card31.setValue(20);
-                ((Spell)card31).setSpellObserver(new GnomishArmyKnife());
-                card31.setDescription("Give a minion Charge,\n" +
-                        "Windfury, Divine Shield,\n" +
-                        "Lifesteal, Poisonous,\n" +
-                        "Taunt, and Stealth.");
-                return card31;
-
             case"Meanstreet Marshal":
                 Card card32 = new Minion();
                 card32.setName("Meanstreet Marshal");
                 card32.setManaCost(1);
                 card32.setRarity(Rarity.RARE);
-                card32.setCardClass(CardClass.PALADIN);
+                card32.setCardClass(CardClass.HUNTER);
                 card32.setType(Type.MINION);
                 card32.setValue(20);
                 ((Minion)card32).setAttack(1);
                 ((Minion)card32).setHP(2);
-                ((Minion)card32).setMinionObserver(new MeanstreetMarshal());
+                ((Minion)card32).setMinionObserver(new MeanstreetMarshal(player, (Minion) card32));
                 card32.setDescription("Deathrattle: If this minion has 2 or more Attack, draw a card.");
                 return card32;
 
@@ -471,7 +448,7 @@ public class CardFactory {
                 card33.setValue(20);
                 ((Minion)card33).setAttack(2);
                 ((Minion)card33).setHP(7);
-                ((Minion)card33).setMinionObserver(new HighPriestAmet());
+                ((Minion)card33).setMinionObserver(new HighPriestAmet(player, (Minion) card33));
                 card33.setDescription("Whenever you summon a\n" +
                         "minion, set its Health equal\n" +
                         "to this minion's.");
@@ -486,7 +463,7 @@ public class CardFactory {
                 card34.setCardClass(CardClass.PRIEST);
                 card34.setType(Type.SPELL);
                 card34.setValue(20);
-                ((Spell)card34).setSpellObserver(new Demonheart());
+                ((Spell)card34).setSpellObserver(new Demonheart(player));
                 card34.setDescription("Deal 5 damage to a minion.  If it's a friendly Demon, give it +5/+5 instead.");
                 return card34;
 
@@ -500,7 +477,7 @@ public class CardFactory {
                 card35.setValue(20);
                 ((Weapon)card35).setDurability(3);
                 ((Weapon)card35).setAttack(1);
-                ((Weapon)card35).setWeaponObserver(new HeavyAxe());
+                ((Weapon)card35).setWeaponObserver(new HeavyAxe(player));
                 card35.setDescription("");
                 return card35;
 
@@ -514,13 +491,13 @@ public class CardFactory {
                 card36.setValue(20);
                 ((Weapon)card36).setDurability(8);
                 ((Weapon)card36).setAttack(3);
-                ((Weapon)card36).setWeaponObserver(new BloodFury());
+                ((Weapon)card36).setWeaponObserver(new BloodFury(player));
                 card36.setDescription("");
                 return card36;
 
             case"Battle Axe":
                 Card card37 = new Weapon();
-                card37.setName("Blood Fury");
+                card37.setName("Battle Axe");
                 card37.setManaCost(1);
                 card37.setRarity(Rarity.LEGENDARY);
                 card37.setCardClass(CardClass.MAGE);
@@ -528,11 +505,73 @@ public class CardFactory {
                 card37.setValue(20);
                 ((Weapon)card37).setDurability(2);
                 ((Weapon)card37).setAttack(2);
-                ((Weapon)card37).setWeaponObserver(new BattleAxe());
+                ((Weapon)card37).setWeaponObserver(new BattleAxe(player));
                 card37.setDescription("");
                 return card37;
+
+
+            case "Locust" :
+                Card card38 = new Minion();
+                card38.setName("Locust");
+                card38.setManaCost(1);
+                card38.setRarity(Rarity.COMMON);
+                card38.setCardClass(CardClass.NEUTRAL);
+                card38.setType(Type.MINION);
+                card38.setValue(20);
+                ((Minion)card38).setAttack(1);
+                ((Minion)card38).setHP(1);
+                ((Minion)card38).setMinionObserver(new Locust(player, (Minion) card38));
+                card38.setDescription("rush");
+                ((Minion)card38).setRush(true);
+                return card38;
+
+            case "Sheep" :
+                Card card39 = new Minion();
+                card39.setName("Sheep");
+                card39.setManaCost(1);
+                card39.setRarity(Rarity.COMMON);
+                card39.setCardClass(CardClass.NEUTRAL);
+                card39.setType(Type.MINION);
+                card39.setValue(20);
+                ((Minion)card39).setAttack(1);
+                ((Minion)card39).setHP(1);
+                ((Minion)card39).setMinionObserver(new Sheep(player, (Minion) card39));
+                card39.setDescription("");
+                return card39;
+
+
+            case "Sleepy Dragon" :
+                Card card40 = new Minion();
+                card40.setName("Sleepy Dragon");
+                card40.setManaCost(9);
+                card40.setRarity(Rarity.COMMON);
+                card40.setCardClass(CardClass.NEUTRAL);
+                card40.setType(Type.MINION);
+                card40.setValue(20);
+                ((Minion)card40).setAttack(6);
+                ((Minion)card40).setHP(6);
+                ((Minion)card40).setMinionObserver(new SleepyDragon(player, (Minion) card40));
+                card40.setDescription("");
+                return card40;
+
+            case "Swamp King Dred" :
+                Card card41 = new Minion();
+                card41.setName("Swamp King Dred");
+                card41.setManaCost(7);
+                card41.setRarity(Rarity.COMMON);
+                card41.setCardClass(CardClass.HUNTER);
+                card41.setType(Type.MINION);
+                card41.setValue(20);
+                ((Minion)card41).setAttack(9);
+                ((Minion)card41).setHP(9);
+                ((Minion)card41).setMinionObserver(new SwampKingDred(player, (Minion) card41));
+                card41.setDescription("");
+                return card41;
+
+
             default :
                 return null;
         }
+
     }
 }

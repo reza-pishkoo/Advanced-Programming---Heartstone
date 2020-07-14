@@ -11,6 +11,7 @@ import gui.playPanel.PlayPanel;
 import guiController.GuiRequest;
 import guiController.UpdateRequest;
 import logicController.actions.Observer;
+import logicController.actions.WeaponObserver;
 import model.GameModel;
 
 import javax.swing.*;
@@ -23,11 +24,11 @@ public class LogicController extends Thread{
     private List<logicController.actions.Observer> observers;
     private Deque<GuiRequest> responses;
 
-    public LogicController(){
+    public LogicController(boolean isDeckReader){
         requests = new LinkedList<>();
         observers = new ArrayList<>();
         responses = new LinkedList<>();
-        gameModel = new GameModel();
+        gameModel = new GameModel(isDeckReader);
     }
 
     public Deque<GuiRequest> getResponses() {
@@ -46,14 +47,21 @@ public class LogicController extends Thread{
     }
 
     public void updateBefore(LogicRequest request) throws Exception{
+        Exception exception = null;
         for (int i = observers.size() - 1; i >= 0; i--) {
-            observers.get(i).observeBeforeRequest(request, this);
+            try {
+                observers.get(i).observeBeforeRequest(request, this);
+            }catch (Exception e){
+                exception = e;
+            }
         }
+        if (exception != null)
+            throw exception;
     }
 
     public void updateAfter(LogicRequest request) throws Exception{
         for (int i = observers.size() - 1; i >= 0; i--) {
-            observers.get(i).observeBeforeRequest(request, this);
+            observers.get(i).observeAfterRequest(request, this);
         }
     }
 
@@ -78,6 +86,7 @@ public class LogicController extends Thread{
 
     private void executeAll(){
         LogicRequest request = requests.pollFirst();
+
         try {
             updateBefore(request);
         } catch (Exception e) {
@@ -105,7 +114,8 @@ public class LogicController extends Thread{
     }
 
 
-    public void endTurn(){
+    public void endTurn(boolean isDeckReader){
+        PlayPanel.sec = 0;
         gameModel.setRound(gameModel.getRound()+1);
         if(finishedOrNot()){
             finishGame();
@@ -122,21 +132,46 @@ public class LogicController extends Thread{
         }
         else
             gameModel.getCurrentPlayer().setCurrentMana(10);
-
-        Random random = new Random();
-        if(gameModel.getCurrentPlayer().getCurrentDeck().size() > 0) {
-            int cardIndex = random.nextInt(gameModel.getCurrentPlayer().getCurrentDeck().size());
-            if (gameModel.getCurrentPlayer().getHandCards().size() < 12) {
-                gameModel.getCurrentPlayer().getHandCards().add
-                        (gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex));
-            }
-            Log.bodyLogger("game", "draw " + gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex).toString());
-            PlayPanel.getInstance().gameLogPanel.appendText("draw " + gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex).toString());
-            gameModel.getCurrentPlayer().getCurrentDeck().remove(cardIndex);
+        if(gameModel.getRound() != 2){
+            if(!isDeckReader)
+                addToHand();
+            else
+                addForDeckReader();
         }
 
         for (Card card : gameModel.getCurrentPlayer().getBattleGroundCards()) {
             card.setCanUse(true);
+        }
+        gameModel.getCurrentPlayer().getHero().setCanAttack(true);
+        gameModel.getNextPlayer().getHero().setCanAttack(true);
+
+        if(gameModel.getCurrentPlayer().getWeapon() != null)
+            gameModel.getCurrentPlayer().getWeapon().setCanUse(true);
+        if(gameModel.getNextPlayer().getWeapon() != null)
+            gameModel.getNextPlayer().getWeapon().setCanUse(true);
+
+    }
+
+    public void addToHand(){
+        Random random = new Random();
+        if(gameModel.getCurrentPlayer().getCurrentDeck().size() > 0) {
+            int cardIndex = random.nextInt(gameModel.getCurrentPlayer().getCurrentDeck().size());
+            if (gameModel.getCurrentPlayer().getHandCards().size() < 10) {
+                gameModel.getCurrentPlayer().getHandCards().add
+                        (gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex));
+            }
+            Log.bodyLogger("game", "draw " + gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex).toString());
+            PlayPanel.getInstance().gameLogPanel.appendText("draw  " + gameModel.getCurrentPlayer().getCurrentDeck().get(cardIndex).toString());
+            gameModel.getCurrentPlayer().getCurrentDeck().remove(cardIndex);
+        }
+    }
+    private void addForDeckReader(){
+        System.out.println(gameModel.getCurrentPlayer() +"   " +gameModel.getCurrentPlayer().getCurrentDeck().size() + "");
+        if(gameModel.getCurrentPlayer().getCurrentDeck().size() > 0) {
+            gameModel.getCurrentPlayer().getHandCards().add(gameModel.getCurrentPlayer().getCurrentDeck().get(0));
+            Log.bodyLogger("game", "draw " + gameModel.getCurrentPlayer().getCurrentDeck().get(0).toString());
+            PlayPanel.getInstance().gameLogPanel.appendText("draw  " + gameModel.getCurrentPlayer().getCurrentDeck().get(0).toString());
+            gameModel.getCurrentPlayer().getCurrentDeck().remove(0);
         }
     }
 
@@ -145,18 +180,23 @@ public class LogicController extends Thread{
         if(gameModel.getCurrentPlayer().getCurrentMana() >= card.getManaCost()) {
             if (card instanceof Minion) {
                 if (gameModel.getCurrentPlayer().getBattleGroundCards().size() < 7) {
-                    ((Minion) card).getMinionObserver().play(request);
+                    register(((Minion)card).getMinionObserver());
+                    ((Minion) card).getMinionObserver().play(request, this);
                     PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
                     Log.bodyLogger("game", "play "+ card.getName());
                     gameModel.getCurrentPlayer().cardPlayed(card.getName());
                 }
             } else if (card instanceof Weapon) {
+                for (Observer observer : observers){
+                    if(observer instanceof WeaponObserver)
+                        unregister(observer);
+                }
                 ((Weapon)card).getWeaponObserver().play(request);
                 PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
                 Log.bodyLogger("game", "play "+ card.getName());
                 gameModel.getCurrentPlayer().cardPlayed(card.getName());
-            } else {
-                ((Spell)card).getSpellObserver().play(request);
+            } else if(card instanceof Spell){
+                ((Spell)card).getSpellObserver().play(request, this);
                 PlayPanel.getInstance().gameLogPanel.appendText("play" + card.getName());
                 Log.bodyLogger("game", "play "+ card.getName());
                 gameModel.getCurrentPlayer().cardPlayed(card.getName());

@@ -19,10 +19,10 @@ public enum CardClass {
             return "warlock";
         }
     },
-    PALADIN{
+    HUNTER{
         @Override
         public String cardClass(){
-            return "paladin";
+            return "hunter";
         }
     },
     PRIEST{

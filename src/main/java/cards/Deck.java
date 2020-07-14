@@ -24,15 +24,18 @@ public class Deck {
     @ElementCollection
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<String> cards;
+
     @ElementCollection
     @Cascade(CascadeType.SAVE_UPDATE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private Map<String, CardDetails> cardsDetails;
 
+
     public Deck(){
         cards = new ArrayList<>();
         cardsDetails = new HashMap<>();
     }
+
 
     public Deck(String hero, String deckName){
         cards = new ArrayList<>();
@@ -49,10 +52,6 @@ public class Deck {
         }
     }
     public void cardPlayed(String cardName){
-        System.out.println(getCardsDetails());
-        System.out.println(cardName);
-        System.out.println(getCardsDetails().get(cardName));
-        System.out.println(getCardsDetails().get(cardName).getUse());
         getCardsDetails().get(cardName).setUse(getCardsDetails().get(cardName).getUse() + 1);
     }
 

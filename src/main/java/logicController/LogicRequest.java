@@ -14,10 +14,7 @@ public abstract class LogicRequest {
     }
 
     void execute(LogicController logicController)throws Exception{
-        //TODO
-        System.out.println("!");
-        System.out.println(logicController.getGameModel().getCurrentPlayer());
-        System.out.println(player);
+        //TODO phase 4
         if (logicController.getGameModel().getCurrentPlayer() != player)
             throw new Exception();
     }

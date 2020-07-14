@@ -99,7 +99,6 @@ public class StatusPanel extends JPanel {
         }
         for(int i = 0; i < currentUser.getAllDecks().size(); i++){
             for(int j = currentUser.getAllDecks().size()-i-1; j > 0; j--){
-                System.out.println(j);
                 double percent1 = ((double) Main.currentUser.getAllDecks().get(j).getWin())/ gamePlayedNumbers;
                 double percent2 = ((double) Main.currentUser.getAllDecks().get(j-1).getWin())/ gamePlayedNumbers;
                 if(percent1 > percent2){
@@ -131,12 +130,12 @@ public class StatusPanel extends JPanel {
             if(bestCardsByRarity.size() == 0)
                 bestCardsByRarity.add(bestCardsByUse.get(i));
             else{
-                if(CardFactory.build(bestCardsByUse.get(i)).getRarity().rarityValue() >
-                        CardFactory.build(bestCardsByRarity.get(0)).getRarity().rarityValue()){
+                if(CardFactory.build(bestCardsByUse.get(i), null).getRarity().rarityValue() >
+                        CardFactory.build(bestCardsByRarity.get(0), null).getRarity().rarityValue()){
                     bestCardsByRarity.clear();
                     bestCardsByRarity.add(bestCardsByUse.get(i));
-                }else if(CardFactory.build(bestCardsByUse.get(i)).getRarity().rarityValue() >
-                        CardFactory.build(bestCardsByRarity.get(0)).getRarity().rarityValue()){
+                }else if(CardFactory.build(bestCardsByUse.get(i), null).getRarity().rarityValue() >
+                        CardFactory.build(bestCardsByRarity.get(0), null).getRarity().rarityValue()){
                     if(!bestCardsByRarity.contains(bestCardsByUse.get(i)))
                         bestCardsByRarity.add(bestCardsByUse.get(i));
                 }
@@ -147,10 +146,10 @@ public class StatusPanel extends JPanel {
             if(bestCardsByMana.size() == 0)
                 bestCardsByMana.add(bestCardsByRarity.get(i));
             else{
-                if(CardFactory.build(bestCardsByRarity.get(i)).getManaCost() > CardFactory.build(bestCardsByMana.get(0)).getManaCost()){
+                if(CardFactory.build(bestCardsByRarity.get(i), null).getManaCost() > CardFactory.build(bestCardsByMana.get(0), null).getManaCost()){
                     bestCardsByMana.clear();
                     bestCardsByMana.add(bestCardsByRarity.get(i));
-                }else if(CardFactory.build(bestCardsByRarity.get(i)).getManaCost() == CardFactory.build(bestCardsByMana.get(0)).getManaCost()){
+                }else if(CardFactory.build(bestCardsByRarity.get(i), null).getManaCost() == CardFactory.build(bestCardsByMana.get(0), null).getManaCost()){
                     if(!bestCardsByMana.contains(bestCardsByRarity.get(i)))
                         bestCardsByMana.add(bestCardsByRarity.get(i));
                 }
@@ -159,7 +158,7 @@ public class StatusPanel extends JPanel {
         String bestCard = "";
         boolean haveMinion = false;
         for(String cardName : bestCardsByMana){
-            if(CardFactory.build(cardName).getType().type().equalsIgnoreCase("minion")){
+            if(CardFactory.build(cardName, null).getType().type().equalsIgnoreCase("minion")){
                 haveMinion = true;
                 bestCard = cardName;
                 break;
@@ -173,7 +172,7 @@ public class StatusPanel extends JPanel {
     private double getAverageMana(Deck deck){
         double sum = 0;
         for(String card : deck.getCards()){
-            sum += CardFactory.build(card).getManaCost();
+            sum += CardFactory.build(card, null).getManaCost();
         }
         return sum/(double)deck.getCards().size();
     }

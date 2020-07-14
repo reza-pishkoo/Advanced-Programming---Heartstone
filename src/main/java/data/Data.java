@@ -1,9 +1,10 @@
 package data;
 
-import CLI.MainMenu;
 import cards.Deck;
+import com.google.gson.Gson;
 import heroes.Hero;
 import heroes.HeroType;
+import model.DeckReaderInput;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -12,9 +13,12 @@ import org.hibernate.service.ServiceRegistry;
 
 import user.User;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static CLI.Main.*;
 import static user.User.startingDeck;
@@ -22,6 +26,8 @@ import static user.User.startingDeck;
 public class Data {
 
     private static SessionFactory sessionFactory = buildSessionFactory();
+    private static Gson gson = new Gson();
+    private static DeckReaderInput mine;
 
     private static SessionFactory buildSessionFactory() {
 //        PrintStream err = System.err;
@@ -45,7 +51,7 @@ public class Data {
         session.close();
     }
 
-    private static <T> T fetch(Class<T> tClass, Serializable id) {
+    public static <T> T fetch(Class<T> tClass, Serializable id) {
         Session session = sessionFactory.openSession();
         T t = session.get(tClass,id);
         session.close();
@@ -75,35 +81,35 @@ public class Data {
     public static List<String> enemyStartingCards(){
         List<String> enemyStartingDeck = new ArrayList<>();
         enemyStartingDeck.add("Mana Wyrm");
-        enemyStartingDeck.add("Polymorph");
-        enemyStartingDeck.add("Friendly Smith");
-        enemyStartingDeck.add("Dreadscale");
-        enemyStartingDeck.add("Blade of C'Thun");
-        enemyStartingDeck.add("Aranasi Broodmother");
-        enemyStartingDeck.add("Cobalt Spellkin");
-        enemyStartingDeck.add("Depth Charge");
-        enemyStartingDeck.add("Evasive Wyrm");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
+        enemyStartingDeck.add("High Priest Amet");
         enemyStartingDeck.add("Blessing of the Ancients");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Strength in Numbers");
+        enemyStartingDeck.add("Learn Draconic");
+        enemyStartingDeck.add("Learn Draconic");
+        enemyStartingDeck.add("Learn Draconic");
         enemyStartingDeck.add("Chaos Nova");
-        enemyStartingDeck.add("Starfire");
-        enemyStartingDeck.add("Piloted Shredder");
-        enemyStartingDeck.add("Hunter's Mark");
-        enemyStartingDeck.add("Gnomish Inventor");
-        enemyStartingDeck.add("Goldshire Footman");
-        enemyStartingDeck.add("Murloc Raider");
-        enemyStartingDeck.add("Stonetusk Boar");
-        enemyStartingDeck.add("Doomsayer");
-        enemyStartingDeck.add("Shieldbearer");
-        enemyStartingDeck.add("Sprint");
+        enemyStartingDeck.add("Learn Draconic");
+        enemyStartingDeck.add("Learn Draconic");
+        enemyStartingDeck.add("Learn Draconic");
+        enemyStartingDeck.add("Learn Draconic");
         enemyStartingDeck.add("Swarm of Locusts");
-        enemyStartingDeck.add("Chaos Nova");
-        enemyStartingDeck.add("Sprint");
-        enemyStartingDeck.add("Doomsayer");
-        enemyStartingDeck.add("Stonetusk Boar");
-        enemyStartingDeck.add("Starfire");
-        enemyStartingDeck.add("Evasive Wyrm");
         enemyStartingDeck.add("Depth Charge");
-        enemyStartingDeck.add("Polymorph");
+        enemyStartingDeck.add("Swarm of Locusts");
         return enemyStartingDeck;
     }
     public static Deck enemyStartingDeck(){
@@ -118,7 +124,7 @@ public class Data {
     public static void setEnemyUser(){
         enemyUser.setUsername("enemy");
         List<Hero> MY_HEROES = new ArrayList<Hero>();
-        MY_HEROES.add(fetch(Hero.class, "Mage"));
+        MY_HEROES.add(fetch(Hero.class, "Warlock"));
         enemyUser.setAllHeroes(MY_HEROES);
         enemyUser.setCurHero(0);
         List<Deck> enemyDecks = new ArrayList<>();
@@ -126,6 +132,71 @@ public class Data {
         enemyUser.setAllDecks(enemyDecks);
         enemyUser.setCurDeck(0);
     }
+
+
+
+    public static DeckReaderInput setDecks() {
+        File file = new File(System.getProperty("user.dir" ) + "\\deckreader\\deckreader.json");
+        String st = "";
+        try {
+            Scanner sca = new Scanner(file);
+            while (sca.hasNextLine()){
+                st += sca.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mine = gson.fromJson(st, DeckReaderInput.class);
+        return mine;
+    }
+
+    public static User DeckReaderFirstUser;
+    public static User DeckReaderSecondUser;
+
+    public static Deck DeckReaderFirstStartingDeck(){
+        Deck ans = new Deck();
+        ans.setDeckName("first deck");
+        ans.setHero("Mage");
+        ans.setCards(setDecks().getFriend());
+        ans.initCardMap();
+        return ans;
+    }
+
+    public static void setDeckReaderFirstUser(){
+        DeckReaderFirstUser = new User();
+        DeckReaderFirstUser.setUsername("Deck first PLayer");
+        List<Hero> MY_HEROES = new ArrayList<Hero>();
+        MY_HEROES.add(fetch(Hero.class, "Mage"));
+        DeckReaderFirstUser.setAllHeroes(MY_HEROES);
+        DeckReaderFirstUser.setCurHero(0);
+        List<Deck> enemyDecks = new ArrayList<>();
+        enemyDecks.add(DeckReaderFirstStartingDeck());
+        DeckReaderFirstUser.setAllDecks(enemyDecks);
+        DeckReaderFirstUser.setCurDeck(0);
+    }
+
+    public static Deck DeckReaderSecondStartingDeck(){
+        Deck ans = new Deck();
+        ans.setDeckName("second deck");
+        ans.setHero("Mage");
+        ans.setCards(setDecks().getEnemy());
+        ans.initCardMap();
+        return ans;
+    }
+
+    public static void setDeckReaderSecondUser(){
+        DeckReaderSecondUser = new User();
+        DeckReaderSecondUser.setUsername("Deck second PLayer");
+        List<Hero> MY_HEROES = new ArrayList<Hero>();
+        MY_HEROES.add(fetch(Hero.class, "Mage"));
+        DeckReaderSecondUser.setAllHeroes(MY_HEROES);
+        DeckReaderSecondUser.setCurHero(0);
+        List<Deck> enemyDecks = new ArrayList<>();
+        enemyDecks.add(DeckReaderSecondStartingDeck());
+        DeckReaderSecondUser.setAllDecks(enemyDecks);
+        DeckReaderSecondUser.setCurDeck(0);
+    }
+
 
     public static String register(String username, String password){
         User user = fetch(User.class, username);
@@ -137,6 +208,10 @@ public class Data {
         currentUser.setNumberOfCoins(600);
         List<Hero> MY_HEROES = new ArrayList<Hero>();
         MY_HEROES.add(fetch(Hero.class, "Mage"));
+        MY_HEROES.add(fetch(Hero.class, "Rouge"));
+        MY_HEROES.add(fetch(Hero.class, "Warlock"));
+        MY_HEROES.add(fetch(Hero.class, "Hunter"));
+        MY_HEROES.add(fetch(Hero.class, "Priest"));
         currentUser.setAllHeroes(MY_HEROES);
         currentUser.setCurHero(0);
         currentUser.setAllCards(User.startingCards());
@@ -177,17 +252,19 @@ public class Data {
         hero.setHeroPower("costs 2 mana and deal 1 damage to any character");
         hero.setSpecialPower("two less mana for playing spells");
         hero.setType(HeroType.MAGE);
+        hero.setDefenceShield(0);
         Data.save(hero);
     }
-    public static void savePaladin(){
+    public static void saveHunter(){
         Hero hero = new Hero();
-        hero.setName("Paladin");
+        hero.setName("Hunter");
         hero.setAttack(2);
         hero.setCanAttack(false);
         hero.setHealth(30);
         hero.setHeroPower("costs 2 mana and deal 1 damage to any character");
         hero.setSpecialPower("two less mana for playing spells");
-        hero.setType(HeroType.PALADIN);
+        hero.setType(HeroType.HUNTER);
+        hero.setDefenceShield(0);
         Data.save(hero);
     }
     public static void savePriest(){
@@ -199,6 +276,7 @@ public class Data {
         hero.setHeroPower("costs 2 mana and deal 1 damage to any character");
         hero.setSpecialPower("two less mana for playing spells");
         hero.setType(HeroType.PRIEST);
+        hero.setDefenceShield(0);
         Data.save(hero);
     }
     public static void saveWarlock(){
@@ -210,6 +288,7 @@ public class Data {
         hero.setHeroPower("costs 2 mana and deal 1 damage to any character");
         hero.setSpecialPower("two less mana for playing spells");
         hero.setType(HeroType.WARLOCK);
+        hero.setDefenceShield(0);
         Data.save(hero);
     }
     public static void saveRouge(){
@@ -221,6 +300,7 @@ public class Data {
         hero.setHeroPower("costs 2 mana and deal 1 damage to any character");
         hero.setSpecialPower("two less mana for playing spells");
         hero.setType(HeroType.ROUGE);
+        hero.setDefenceShield(0);
         Data.save(hero);
     }
 }

@@ -139,7 +139,7 @@ public class StoreMainPanel extends JPanel {
             JLabel value1 = new JLabel("value: ");
             value1.setBounds(40, 320, 100, 20);
             add(value1);
-            JLabel value2 = new JLabel(CardFactory.build(cardName).getValue() + "");
+            JLabel value2 = new JLabel(CardFactory.build(cardName, null).getValue() + "");
             value2.setBounds(160, 320, 100, 20);
             add(value2);
 
@@ -153,21 +153,21 @@ public class StoreMainPanel extends JPanel {
             JLabel Class1 = new JLabel("class: ");
             Class1.setBounds(40, 380, 100, 20);
             add(Class1);
-            JLabel Class2 = new JLabel(CardFactory.build(cardName).getCardClass().toString());
+            JLabel Class2 = new JLabel(CardFactory.build(cardName, null).getCardClass().toString());
             Class2.setBounds(160, 380, 100, 20);
             add(Class2);
 
             JLabel type1 = new JLabel("type: ");
             type1.setBounds(40, 410, 100, 20);
             add(type1);
-            JLabel type2 = new JLabel(CardFactory.build(cardName).getType().toString());
+            JLabel type2 = new JLabel(CardFactory.build(cardName, null).getType().toString());
             type2.setBounds(160, 410, 100, 20);
             add(type2);
 
             JLabel rarity1 = new JLabel("rarity: ");
             rarity1.setBounds(40, 440, 100, 20);
             add(rarity1);
-            JLabel rarity2 = new JLabel(CardFactory.build(cardName).getRarity().toString());
+            JLabel rarity2 = new JLabel(CardFactory.build(cardName, null).getRarity().toString());
             rarity2.setBounds(160, 440, 100, 20);
             add(rarity2);
 
@@ -447,7 +447,7 @@ public class StoreMainPanel extends JPanel {
             private StoreHeroPanel neutralPanel;
             private StoreHeroPanel magePanel;
             private StoreHeroPanel warlockPanel;
-            private StoreHeroPanel paladinPanel;
+            private StoreHeroPanel hunterPanel;
             private StoreHeroPanel priestPanel;
             private StoreHeroPanel rougePanel;
             private JScrollPane scrollPane;
@@ -486,8 +486,8 @@ public class StoreMainPanel extends JPanel {
                 addTab("ROUGE", scrollPane3);
                 setMnemonicAt(3, KeyEvent.VK_4);
 
-                paladinPanel = new StoreHeroPanel(CardClass.PALADIN);
-                scrollPane4 = new JScrollPane(paladinPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                hunterPanel = new StoreHeroPanel(CardClass.HUNTER);
+                scrollPane4 = new JScrollPane(hunterPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 scrollPane4.setPreferredSize(new Dimension(900, 560));
                 addTab("PALADIN", scrollPane4);
                 setMnemonicAt(4, KeyEvent.VK_5);
@@ -557,7 +557,7 @@ public class StoreMainPanel extends JPanel {
 
         public void setHeroCards() {
             for (String cardName : market.getAllCards()) {
-                if (CardFactory.build(cardName).getCardClass() == cardClass) {
+                if (CardFactory.build(cardName, null).getCardClass() == cardClass) {
                     heroCards.add(cardName);
                 }
             }
@@ -662,7 +662,7 @@ public class StoreMainPanel extends JPanel {
             removeAll();
             searchedCards.clear();
             for (String cardName : market.getAllCards()) {
-                if (CardFactory.build(cardName).getManaCost() == mana) {
+                if (CardFactory.build(cardName, null).getManaCost() == mana) {
                     searchedCards.add(cardName);
                 }
             }

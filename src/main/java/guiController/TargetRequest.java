@@ -3,6 +3,8 @@ package guiController;
 import model.GameModel;
 import model.PlayerModel;
 
+import javax.swing.*;
+
 public class TargetRequest extends GuiRequest{
 
     public TargetRequest(PlayerModel player, GameModel gameModel) {
@@ -12,7 +14,8 @@ public class TargetRequest extends GuiRequest{
     @Override
     void execute(GuiController guiController) throws Exception {
         super.execute(guiController);
-        System.out.println("f");
         guiController.setNeedTarget(true);
+        JOptionPane.showMessageDialog(null, "choose target", "target", JOptionPane.ERROR_MESSAGE);
+
     }
 }

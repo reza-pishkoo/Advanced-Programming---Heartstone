@@ -24,7 +24,8 @@ public class Hero {
     private String HeroPower;
     @Column
     private String SpecialPower;
-
+    @Column
+    private int defenceShield;
 
 
     public String getName() {
@@ -81,6 +82,14 @@ public class Hero {
 
     public void setSpecialPower(String specialPower) {
         SpecialPower = specialPower;
+    }
+
+    public int getDefenceShield() {
+        return defenceShield;
+    }
+
+    public void setDefenceShield(int defenceShield) {
+        this.defenceShield = defenceShield;
     }
 
     @Override

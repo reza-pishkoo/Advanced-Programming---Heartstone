@@ -55,7 +55,7 @@ public class CollectionMainPanel extends JPanel{
     public void  updateCardsPanel(){
         cardsPanel.mainFilterPage.warlockPanel.drawHeroTypeCards();
         cardsPanel.mainFilterPage.magePanel.drawHeroTypeCards();
-        cardsPanel.mainFilterPage.paladinPanel.drawHeroTypeCards();
+        cardsPanel.mainFilterPage.hunterPanel.drawHeroTypeCards();
         cardsPanel.mainFilterPage.priestPanel.drawHeroTypeCards();
         cardsPanel.mainFilterPage.rougePanel.drawHeroTypeCards();
         cardsPanel.mainFilterPage.neutralPanel.drawHeroTypeCards();
@@ -220,8 +220,8 @@ public class CollectionMainPanel extends JPanel{
 
                     boolean canChangeHero = true;
                     for(String card : currentUser.getAllDecks().get(currentUser.getCurDeck()).getCards()){
-                        if(!HName.equalsIgnoreCase(CardFactory.build(card).getCardClass().cardClass()) &&
-                                !CardFactory.build(card).getCardClass().cardClass().equalsIgnoreCase("neutral"))
+                        if(!HName.equalsIgnoreCase(CardFactory.build(card, null).getCardClass().cardClass()) &&
+                                !CardFactory.build(card, null).getCardClass().cardClass().equalsIgnoreCase("neutral"))
                             canChangeHero = false;
                     }
                     if(canChangeHero) {
@@ -492,7 +492,7 @@ public class CollectionMainPanel extends JPanel{
             private CollectionHeroPanel neutralPanel;
             private CollectionHeroPanel magePanel;
             private CollectionHeroPanel warlockPanel;
-            private CollectionHeroPanel paladinPanel;
+            private CollectionHeroPanel hunterPanel;
             private CollectionHeroPanel priestPanel;
             private CollectionHeroPanel rougePanel;
             private JScrollPane scrollPane;
@@ -537,8 +537,8 @@ public class CollectionMainPanel extends JPanel{
                 addTab("ROUGE", scrollPane3);
                 setMnemonicAt(4, KeyEvent.VK_4);
 
-                paladinPanel = new CollectionHeroPanel(CardClass.PALADIN, deckPanel);
-                scrollPane4 = new JScrollPane(paladinPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                hunterPanel = new CollectionHeroPanel(CardClass.HUNTER, deckPanel);
+                scrollPane4 = new JScrollPane(hunterPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
                 scrollPane4.setPreferredSize(new Dimension(900, 560));
                 addTab("PALADIN", scrollPane4);
                 setMnemonicAt(5, KeyEvent.VK_5);
@@ -615,7 +615,7 @@ public class CollectionMainPanel extends JPanel{
         }
         public void setHeroCards(){
             for(String cardName : market.getAllCards()) {
-                if (CardFactory.build(cardName).getCardClass() == cardClass) {
+                if (CardFactory.build(cardName, null).getCardClass() == cardClass) {
                     heroCards.add(cardName);
                 }
             }
@@ -704,7 +704,7 @@ public class CollectionMainPanel extends JPanel{
             removeAll();
             searchedCards.clear();
             for(String cardName : market.getAllCards()) {
-                if(CardFactory.build(cardName).getManaCost() == mana){
+                if(CardFactory.build(cardName, null).getManaCost() == mana){
                     searchedCards.add(cardName);
                 }
             }

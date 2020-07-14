@@ -7,8 +7,10 @@ public class Weapon extends Card {
     private int Durability;
     private int attack;
     private WeaponObserver weaponObserver;
+    private boolean canUse;
 
     public Weapon(){
+        canUse = false;
     }
 
     public void setDurability(int durability) {

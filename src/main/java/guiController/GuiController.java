@@ -12,6 +12,7 @@ public class GuiController extends Thread{
     private PlayPanel playPanel;
     private Deque<LogicRequest> responses;
     private boolean needTarget;
+    private boolean needSummon;
 
     public GuiController(Deque<GuiRequest> requests, Deque<LogicRequest> responses){
         this.requests = requests;
@@ -42,7 +43,7 @@ public class GuiController extends Thread{
             GuiRequest request = requests.pollFirst();
             request.execute(this);
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }
@@ -67,4 +68,11 @@ public class GuiController extends Thread{
         this.needTarget = needTarget;
     }
 
+    public boolean isNeedSummon() {
+        return needSummon;
+    }
+
+    public void setNeedSummon(boolean needSummon) {
+        this.needSummon = needSummon;
+    }
 }

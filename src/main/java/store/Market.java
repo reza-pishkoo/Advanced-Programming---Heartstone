@@ -54,15 +54,15 @@ public class Market {
 
         for(String moveOnCards : allCards){
             if(cardName.equals(moveOnCards)){
-                if(currentUser.getNumberOfCoins() >= CardFactory.build(moveOnCards).getValue()) {
-                    boolean isHero = CardFactory.build(cardName).getCardClass().equals(CardClass.NEUTRAL);
+                if(currentUser.getNumberOfCoins() >= CardFactory.build(moveOnCards, null).getValue()) {
+                    boolean isHero = CardFactory.build(cardName, null).getCardClass().equals(CardClass.NEUTRAL);
                     for (Hero  hero : currentUser.getAllHeroes())
-                        if (hero.getName().equalsIgnoreCase(CardFactory.build(cardName).getCardClass().cardClass()) ||
-                                CardFactory.build(cardName).getCardClass().equals(CardClass.NEUTRAL))
+                        if (hero.getName().equalsIgnoreCase(CardFactory.build(cardName, null).getCardClass().cardClass()) ||
+                                CardFactory.build(cardName, null).getCardClass().equals(CardClass.NEUTRAL))
                             isHero = true;
                     if (isHero) {
                         currentUser.getAllCards().add(moveOnCards);
-                        currentUser.setNumberOfCoins(currentUser.getNumberOfCoins() - CardFactory.build(cardName).getValue());
+                        currentUser.setNumberOfCoins(currentUser.getNumberOfCoins() - CardFactory.build(cardName, null).getValue());
                     }
                     else
                         return "you dont have that hero";
@@ -94,7 +94,7 @@ public class Market {
         }
         if (existForSell) {
             currentUser.getAllCards().remove(cardName);
-            currentUser.setNumberOfCoins(currentUser.getNumberOfCoins() + CardFactory.build(cardName).getValue());
+            currentUser.setNumberOfCoins(currentUser.getNumberOfCoins() + CardFactory.build(cardName, null).getValue());
 
             Log.bodyLogger("sell", cardName);
             return "card sold !";
@@ -122,7 +122,6 @@ public class Market {
         ans.add("Blade of C'Thun");
         ans.add("Aranasi Broodmother");
         ans.add("Chaos Nova");
-        ans.add("Starfire");
         ans.add("Hunter's Mark");
         ans.add("Doomsayer");
         ans.add("Gnomish Inventor");
@@ -132,17 +131,18 @@ public class Market {
         ans.add("Book of Specters");
         ans.add("Sathrovarr");
         ans.add("Tomb Warden");
-        ans.add("Security Rover");
         ans.add("Curio Collector");
         ans.add("Strength in Numbers");
         ans.add("Learn Draconic");
-        ans.add("Gnomish Army Knife");
+        ans.add("Swamp King Dred");
         ans.add("Meanstreet Marshal");
         ans.add("High Priest Amet");
         ans.add("Demonheart");
         ans.add("Battle Axe");
         ans.add("Heavy Axe");
         ans.add("Blood Fury");
+        ans.add("Locust");
+        ans.add("Sheep");
 
         return ans;
     }

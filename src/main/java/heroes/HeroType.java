@@ -4,6 +4,6 @@ public enum HeroType {
     MAGE,
     ROUGE,
     WARLOCK,
-    PALADIN,
+    HUNTER,
     PRIEST;
 }

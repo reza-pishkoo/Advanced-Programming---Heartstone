@@ -20,9 +20,23 @@ public class PassivePanel extends JPanel {
 
     private JButton backButton;
     private JButton exitButton;
-    List<String> startingPassiveCards;
+
+    List<String> FirstPlayerStartingPassiveCards;
+    List<String> SecondPlayerStartingPassiveCards;
+
     private List<String> passiveCards;
     private JButton startGameButton;
+    private JButton deckReaderButton;
+
+    private String FirstPlayerPassive = "";
+    private String SecondPlayerPassive = "";
+
+    private PlayerPassivePanel firstOne;
+    private PlayerPassivePanel secondOne;
+
+    private JLabel firstPlayer;
+    private JLabel secondPlayer;
+
     private PassivePanel(){
         setSize(1200,700);
         setPreferredSize(new Dimension(1200,700));
@@ -39,17 +53,34 @@ public class PassivePanel extends JPanel {
     public void setPassivePage(){
         removeAll();
         PassivePanel.getInstance().startPassivePanel();
-        PlayPanel.startGame();
+    }
+    private void initLabels(){
+        firstPlayer = new JLabel("FIRST PLAYER PASSIVE");
+        firstPlayer.setBounds(90, 10, 200, 30);
+        firstPlayer.setForeground(Color.WHITE);
+        add(firstPlayer);
+        secondPlayer = new JLabel("SECOND PLAYER PASSIVE");
+        secondPlayer.setBounds(540,  10, 200, 30);
+        secondPlayer.setForeground(Color.WHITE);
+        add(secondPlayer);
     }
 
 
     public void startPassivePanel(){
+        FirstPlayerPassive = "";
+        SecondPlayerPassive = "";
+        initLabels();
         initBackButton();
         initExitButton();
         initStartGameButton();
+        initDeckReaderButton();
         setPassiveCards();
-        chooseStartingPassive();
-        drawStartingPassive();
+
+        FirstPlayerStartingPassive();
+        SecondPlayerStartingPassive();
+
+        initFirstOne();
+        initSecondOne();
     }
     private void initExitButton(){
         exitButton = new JButton("EXIT");
@@ -79,60 +110,122 @@ public class PassivePanel extends JPanel {
     }
     private void setPassiveCards(){
         passiveCards = new ArrayList<>();
-        passiveCards.add("Band of Scarabs");
-        passiveCards.add("Alchemist Stone");
-        passiveCards.add("Aprinces Ring");
-        passiveCards.add("Band of Ben");
-        passiveCards.add("Battle Totem");
+        passiveCards.add("Off Cards");
+        passiveCards.add("Warriors");
+        passiveCards.add("Nurse");
+        passiveCards.add("Twice draw");
+        passiveCards.add("Mana jump");
     }
-    private void chooseStartingPassive(){
-        startingPassiveCards = new ArrayList<>();
-        List<String> passiveCopies = passiveCards;
+    private void initFirstOne(){
+        firstOne = new PlayerPassivePanel(1);
+        firstOne.setBounds(50,50,300,400);
+        this.add(firstOne);
+    }
+    private void initSecondOne(){
+        secondOne = new PlayerPassivePanel(2);
+        secondOne.setBounds(500,50,300,400);
+        this.add(secondOne);
+    }
+    private void FirstPlayerStartingPassive(){
+        FirstPlayerStartingPassiveCards = new ArrayList<>();
+        List<String> passiveCopies = new ArrayList<>();
+        for(String st : passiveCards){
+            passiveCopies.add(st);
+        }
         Random random = new Random();
         for(int i = 0; i < 3; i++){
             int x = random.nextInt(5-i);
-            startingPassiveCards.add(passiveCopies.get(x));
+            FirstPlayerStartingPassiveCards.add(passiveCopies.get(x));
             passiveCopies.remove(x);
         }
     }
-    private void drawStartingPassive(){
-        int i = 0;
-
-        for(String cardName : startingPassiveCards){
-            i++;
-            MouseListener mouseListener = new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent mouseEvent) {
-                    PlayPanel.getInstance().getGameModel().getFirstPlayer().setPassive(cardName);
-                    JOptionPane.showMessageDialog(null, "you choose  " + cardName + "  as your passive",
-                            "passive", JOptionPane.ERROR_MESSAGE);
-                    Log.bodyLogger("choose passive", cardName);
-                }
-                @Override
-                public void mousePressed(MouseEvent mouseEvent) { }
-                @Override
-                public void mouseReleased(MouseEvent mouseEvent) { }
-                @Override
-                public void mouseEntered(MouseEvent mouseEvent) { }
-                @Override
-                public void mouseExited(MouseEvent mouseEvent) { }
-            };
-            ImageCardPanel cardImage = new ImageCardPanel(cardName, mouseListener, true);
-            cardImage.setBounds(180 + (i*160), 100, 160, 200);
-            add(cardImage);
+    private void SecondPlayerStartingPassive(){
+        SecondPlayerStartingPassiveCards = new ArrayList<>();
+        List<String> passiveCopies = new ArrayList<>();
+        for(String st : passiveCards){
+            passiveCopies.add(st);
         }
+        Random random = new Random();
+        for(int i = 0; i < 3; i++){
+            int x = random.nextInt(5-i);
+            SecondPlayerStartingPassiveCards.add(passiveCopies.get(x));
+            passiveCopies.remove(x);
+        }
+    }
+
+    private class PlayerPassivePanel extends JPanel{
+        public int x;
+        public PlayerPassivePanel(int x){
+            this.x = x;
+            setLayout(null);
+            setBackground(new Color(0,0,0,5));
+            setSize(300, 400);
+            drawPassives();
+        }
+        private void drawPassives(){
+            for (int i = 0; i < 3; i++) {
+                if(x == 1){
+                    JButton passiveButton = new JButton();
+                    passiveButton.setText(FirstPlayerStartingPassiveCards.get(i));
+                    passiveButton.setBounds(50,(i+1)*100, 200, 80);
+                    passiveButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            FirstPlayerPassive= passiveButton.getText();
+                        }
+                    });
+                    add(passiveButton);
+                }
+                if(x == 2){
+                    JButton passiveButton = new JButton();
+                    passiveButton.setText(SecondPlayerStartingPassiveCards.get(i));
+                    passiveButton.setBounds(50,(i+1)*100, 200, 80);
+                    passiveButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            SecondPlayerPassive= passiveButton.getText();
+                            Log.bodyLogger("choose passive", passiveButton.getText());
+                        }
+                    });
+                    add(passiveButton);
+                }
+            }
+        }
+
     }
     private void initStartGameButton(){
         startGameButton = new JButton("Start");
-        startGameButton.setBounds(500,500,200,50);
+        startGameButton.setBounds(600,500,200,50);
         startGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 Log.bodyLogger("navigate", "start game");
-                MainFrame.cl.show(MainFrame.panelCont, "6");
+                if (FirstPlayerPassive != "" && SecondPlayerPassive != "") {
+                    PlayPanel.startGame(FirstPlayerPassive, SecondPlayerPassive, false);
+                    MainFrame.cl.show(MainFrame.panelCont, "6");
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "choose passive", "passive", JOptionPane.ERROR_MESSAGE);
             }
         });
         getInstance().add(startGameButton);
+    }
+    private void initDeckReaderButton(){
+        deckReaderButton = new JButton("Deck Reader");
+        deckReaderButton.setBounds(200, 500, 200, 50);
+        deckReaderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Log.bodyLogger("navigate", "start game");
+                if (FirstPlayerPassive != "" && SecondPlayerPassive != "") {
+                    PlayPanel.startGame(FirstPlayerPassive, SecondPlayerPassive, true);
+                    MainFrame.cl.show(MainFrame.panelCont, "6");
+                }
+                else
+                    JOptionPane.showMessageDialog(null, "choose passive", "passive", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        getInstance().add(deckReaderButton);
     }
 
 

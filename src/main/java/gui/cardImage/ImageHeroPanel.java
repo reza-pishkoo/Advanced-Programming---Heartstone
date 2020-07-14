@@ -3,6 +3,7 @@ package gui.cardImage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -11,11 +12,13 @@ public class ImageHeroPanel extends JPanel {
     BufferedImage image;
     public String heroName;
 
-    public ImageHeroPanel(String heroName){
+    public ImageHeroPanel(String heroName, MouseListener mouseListener){
         this.heroName = heroName;
 
+        addMouseListener(mouseListener);
+
         try {
-            image = ImageIO.read(new File("images/Card Images/" + heroName + ".jpg"));
+            image = ImageIO.read(new File("images/playImages/" + heroName + ".jpg"));
         } catch (IOException e) {
             e.printStackTrace();
         }
